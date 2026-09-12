@@ -1,0 +1,9 @@
+.env*
+.sync
+tests
+test-results
+playwright-report
+ACCESS.md
+scripts
+
+output/
