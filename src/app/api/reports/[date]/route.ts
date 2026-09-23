@@ -1,9 +1,11 @@
 import { api } from "../../../../../convex/_generated/api";
 import { authorized, client, secret } from "@/lib/server";
+import { demoMode } from "@/lib/demo";
 export async function GET(_request: Request, { params }: { params: Promise<{date:string}> }) {
   if (!await authorized()) return new Response("Unlock your workspace",{status:401});
   const {date}=await params;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return new Response("Not found",{status:404});
+  if (demoMode()) return new Response(`Demo mode: the PDF report for ${date} lives in Convex storage.`,{headers:{"Content-Type":"text/plain; charset=utf-8"}});
   try {
     const url=await client().query(api.workspace.reportUrl,{token:secret(),date});
     if (!url) return new Response("Report not found",{status:404});
